@@ -1,0 +1,156 @@
+{
+  "name": "Social Media Content Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "47c228e8-7bcd-4730-9132-56c9c96a7306",
+      "name": "Telegram Trigger",
+      "webhookId": "7b46fc83-34a4-44c8-997b-c6a23c586e36",
+      "credentials": {
+        "telegramApi": {
+          "id": "98Al47BIavs6MRX2",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        128
+      ],
+      "id": "13838c8c-6d3e-420e-a336-4b3e3e42726b",
+      "name": "When chat message received",
+      "webhookId": "a4078326-7988-48d1-b840-cabad054e229"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert social media content strategist.\n\nThe user will provide a natural-language content brief.\n\nYour task is to create THREE platform-specific drafts from the brief:\n\n1. LinkedIn\n2. X/Twitter\n3. Instagram\n\nUSER BRIEF:\n{{ $('Telegram Trigger').item.json.message.text }}\n\nCONTENT REQUIREMENTS:\n\nLINKEDIN:\n- Write a professional but engaging LinkedIn post.\n- Use short paragraphs for readability.\n- Start with a strong hook.\n- Provide useful insights rather than generic statements.\n- End with a thoughtful question or call to action.\n- Use 3–5 relevant hashtags.\n- Avoid excessive emojis.\n\nX/TWITTER:\n- Create a thread of 4–6 posts.\n- Each post must be concise enough for X.\n- The first post should be a strong hook.\n- Each subsequent post should logically continue the idea.\n- The final post should provide a conclusion or call to action.\n- Number each post as 1/, 2/, 3/, etc.\n\nINSTAGRAM:\n- Write an engaging caption.\n- Start with a strong first line.\n- Use a conversational style.\n- Include a clear call to action.\n- Use 5–8 relevant hashtags.\n- Emojis may be used naturally but should not be excessive.\n\nIMPORTANT:\n- Do not mention that you are an AI.\n- Do not add explanations, notes, or commentary outside the requested JSON.\n- Return only valid JSON.\n- Make each platform's content meaningfully different rather than copying the same text.\n\nReturn ONLY valid JSON in exactly this structure:\n\n{\n  \"linkedin\": \"LinkedIn post here\",\n  \"twitter_thread\": [\n    \"1/ ...\",\n    \"2/ ...\",\n    \"3/ ...\",\n    \"4/ ...\"\n  ],\n  \"instagram\": \"Instagram caption here\"\n}\nImportant:\n- Never invent statistics, percentages, research findings, company claims, or factual numbers.\n- Only use numerical claims if they are explicitly provided in the user's brief.\n- If the brief does not contain evidence for a claim, express it qualitatively instead.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        416,
+        0
+      ],
+      "id": "26f8a8a8-9c3f-4575-b0c5-50092e9746ce",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        992,
+        0
+      ],
+      "id": "2dfbe226-0b20-4780-8008-462ab9e6e042",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "a1eC4LpD9F9S9Ps3",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 775304975,
+          "message": {
+            "message_id": 4,
+            "from": {
+              "id": 2076356844,
+              "is_bot": false,
+              "first_name": "Bhanu Deergasi",
+              "username": "bhanu_deergasi",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 2076356844,
+              "first_name": "Bhanu Deergasi",
+              "username": "bhanu_deergasi",
+              "type": "private"
+            },
+            "date": 1787116438,
+            "text": "I want to create social media content about how AI agents are changing software development. The target audience is software developers and AI/tech students. Keep the brand tone professional, conversational, and slightly thought-provoking."
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7e5f4a87-111b-4939-83f9-bb960c41b034",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b438af64ce1b2a76948629b109f6f152a08b8580ba6d3ea6989ea94eca4091b2"
+  },
+  "nodeGroups": [],
+  "id": "2Ith7Fc1JXoGrbBN",
+  "tags": []
+}
