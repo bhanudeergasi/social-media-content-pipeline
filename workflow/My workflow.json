@@ -1,0 +1,72 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "47c228e8-7bcd-4730-9132-56c9c96a7306",
+      "name": "Telegram Trigger",
+      "webhookId": "7b46fc83-34a4-44c8-997b-c6a23c586e36",
+      "credentials": {
+        "telegramApi": {
+          "id": "98Al47BIavs6MRX2",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 775304975,
+          "message": {
+            "message_id": 4,
+            "from": {
+              "id": 2076356844,
+              "is_bot": false,
+              "first_name": "Bhanu Deergasi",
+              "username": "bhanu_deergasi",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 2076356844,
+              "first_name": "Bhanu Deergasi",
+              "username": "bhanu_deergasi",
+              "type": "private"
+            },
+            "date": 1787116438,
+            "text": "I want to create social media content about how AI agents are changing software development. The target audience is software developers and AI/tech students. Keep the brand tone professional, conversational, and slightly thought-provoking."
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4ade8e81-9721-4c17-9474-5cc1dd7488c3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b438af64ce1b2a76948629b109f6f152a08b8580ba6d3ea6989ea94eca4091b2"
+  },
+  "nodeGroups": [],
+  "id": "2Ith7Fc1JXoGrbBN",
+  "tags": []
+}
