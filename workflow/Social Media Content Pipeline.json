@@ -62,8 +62,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        992,
-        0
+        416,
+        176
       ],
       "id": "2dfbe226-0b20-4780-8008-462ab9e6e042",
       "name": "Groq Chat Model",
@@ -73,38 +73,754 @@
           "name": "Groq account"
         }
       }
-    }
-  ],
-  "pinData": {
-    "Telegram Trigger": [
-      {
-        "json": {
-          "update_id": 775304975,
-          "message": {
-            "message_id": 4,
-            "from": {
-              "id": 2076356844,
-              "is_bot": false,
-              "first_name": "Bhanu Deergasi",
-              "username": "bhanu_deergasi",
-              "language_code": "en"
-            },
-            "chat": {
-              "id": 2076356844,
-              "first_name": "Bhanu Deergasi",
-              "username": "bhanu_deergasi",
-              "type": "private"
-            },
-            "date": 1787116438,
-            "text": "I want to create social media content about how AI agents are changing software development. The target audience is software developers and AI/tech students. Keep the brand tone professional, conversational, and slightly thought-provoking."
-          }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=📝 YOUR CONTENT DRAFTS  \n💼 LINKEDIN \n{{ $('Basic LLM Chain').item.json.output.linkedin }}\n🐦 X / TWITTER THREAD\n {{ $('Basic LLM Chain').item.json.output.twitter_thread }}\n📸 INSTAGRAM\n{{ $('Basic LLM Chain').item.json.output.instagram }}\nChoose an action:",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "APPROVE",
+                    "additionalFields": {
+                      "callback_data": "=approve:{{ $('Create Draft Record').item.json.draft_id }}"
+                    }
+                  },
+                  {
+                    "text": "REGENERATE",
+                    "additionalFields": {
+                      "callback_data": "=regenerate:{{ $('Create Draft Record').item.json.draft_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
-        "pairedItem": {
-          "item": 0
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        16
+      ],
+      "id": "c58749a9-9a29-41b0-aa57-3d5ee6a7b1aa",
+      "name": "Send a text message",
+      "webhookId": "0ebc951e-533d-42b9-898e-03b2656d4ca1",
+      "credentials": {
+        "telegramApi": {
+          "id": "98Al47BIavs6MRX2",
+          "name": "Telegram account"
         }
       }
-    ]
-  },
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"twitter_thread\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"instagram\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"linkedin\",\n    \"twitter_thread\",\n    \"instagram\"\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        208
+      ],
+      "id": "b123e049-3552-45f2-9399-82ca121db750",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        1888,
+        16
+      ],
+      "id": "5335eb7f-4ab5-4390-9504-515466671fb7",
+      "name": "Telegram Trigger1",
+      "webhookId": "98491764-03a2-44ec-a453-170d5c4d25e0",
+      "credentials": {
+        "telegramApi": {
+          "id": "98Al47BIavs6MRX2",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fea2bfb8-e88b-4c3c-b1c8-dac21bb2de5f",
+              "name": "draft_id",
+              "value": "={{ $now.toMillis() }}-{{ Math.floor(Math.random() * 10000) }}",
+              "type": "string"
+            },
+            {
+              "id": "46df4e88-35c6-4e46-8b29-36b79b8cc68a",
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "type": "string"
+            },
+            {
+              "id": "3edcab1c-fcd4-4439-a931-3d986e9ea1ff",
+              "name": "status",
+              "value": "pending",
+              "type": "string"
+            },
+            {
+              "id": "a8944b2c-4dc5-45f2-b0ea-c9b26838ff91",
+              "name": "created_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "d5653c93-8493-497b-97ad-5e35297157d4",
+              "name": "brief",
+              "value": "={{ $('Telegram Trigger').item.json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        768,
+        16
+      ],
+      "id": "94cc64b9-dae9-483e-a42e-1ffc0199cf43",
+      "name": "Create Draft Record"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "ngEk11YuXhRpQwJD",
+          "mode": "list",
+          "cachedResultName": "content_drafts",
+          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "draft_id": "={{ $json.draft_id }}",
+            "chat_id": "={{ $json.chat_id }}",
+            "linkedin": "={{ $('Basic LLM Chain').item.json.output.linkedin }}",
+            "twitter_thread": "={{ JSON.stringify($('Basic LLM Chain').item.json.output.twitter_thread) }}",
+            "instragram": "={{ $('Basic LLM Chain').item.json.output.instagram }}",
+            "status": "={{ $json.status }}",
+            "created_at": "={{ $json.created_at }}",
+            "brief": "={{ $json.brief }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "draft_id",
+              "displayName": "draft_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "linkedin",
+              "displayName": "linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "twitter_thread",
+              "displayName": "twitter_thread",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "instragram",
+              "displayName": "instragram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "brief",
+              "displayName": "brief",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        992,
+        16
+      ],
+      "id": "00a1c5da-8a86-43c3-82fe-3bfb8f9f4893",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0913d292-083a-4fa2-ad83-913728b02054",
+              "name": "action",
+              "value": "={{ $json.callback_query.data.split(':')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "5e6f077a-34d8-4352-8fae-604ef053cee5",
+              "name": "draft_id",
+              "value": "={{ $json.callback_query.data.split(':')[1] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2112,
+        16
+      ],
+      "id": "3adbeba0-8c3d-4bfa-9f57-b6b88ae86959",
+      "name": "Parse Callback"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ngEk11YuXhRpQwJD",
+          "mode": "list",
+          "cachedResultName": "content_drafts",
+          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "draft_id",
+              "keyValue": "={{ $('Parse Callback').item.json.draft_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2336,
+        16
+      ],
+      "id": "e7852a7d-e3de-454b-b898-22d042acbbda",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b4233987-9289-40a5-afff-6270b3bff06c",
+              "leftValue": "={{$json.status}}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2560,
+        16
+      ],
+      "id": "c5492aac-48fa-4d07-ba7e-999450d971a3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Parse Callback').item.json.action }}",
+                    "rightValue": "approve",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5b19d711-7d23-4a10-847f-131141eb1693"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "dc1f4069-1a23-4358-baf9-52d9c6325736",
+                    "leftValue": "={{ $('Parse Callback').item.json.action}}",
+                    "rightValue": "regenerate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2784,
+        -80
+      ],
+      "id": "bf2d3be5-f19c-4ee6-bd1b-30ed02dd0f94",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ngEk11YuXhRpQwJD",
+          "mode": "list",
+          "cachedResultName": "content_drafts",
+          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "draft_id",
+              "keyValue": "={{ $('Parse Callback').item.json.draft_id\n}}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "approved"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "draft_id",
+              "displayName": "draft_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "linkedin",
+              "displayName": "linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "twitter_thread",
+              "displayName": "twitter_thread",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "instragram",
+              "displayName": "instragram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3008,
+        -176
+      ],
+      "id": "08971ca2-eca4-4134-8ec5-6f21895af48a",
+      "name": "Update row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1HHKcKSFIrFxkM-cqdcbPLlQIM83olGVdmT3s3lavk_g",
+          "mode": "list",
+          "cachedResultName": "Social Media Publishing Calender",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HHKcKSFIrFxkM-cqdcbPLlQIM83olGVdmT3s3lavk_g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "calender",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HHKcKSFIrFxkM-cqdcbPLlQIM83olGVdmT3s3lavk_g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "draft_id": "={{ $('Get row(s)').item.json.draft_id }}",
+            "chat_id": "={{ $('Get row(s)').item.json.chat_id }}",
+            "linkedin": "={{ $('Get row(s)').item.json.linkedin }}",
+            "twitter_thread": "={{ $('Get row(s)').item.json.twitter_thread }}",
+            "instagram": "={{ $('Get row(s)').item.json.instragram }}",
+            "status": "=approved",
+            "created_at": "={{ $('Get row(s)').item.json.created_at }}",
+            "scheduled_date": "={{ $now.plus({days: 1}).toFormat('yyyy-MM-dd') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "draft_id",
+              "displayName": "draft_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "linkedin",
+              "displayName": "linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "twitter_thread",
+              "displayName": "twitter_thread",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram",
+              "displayName": "instagram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scheduled_date",
+              "displayName": "scheduled_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3168,
+        -160
+      ],
+      "id": "1ef0f7e9-607c-4d3c-a5fb-6d4e9a18905a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kOh38l89Re1vRqEx",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ngEk11YuXhRpQwJD",
+          "mode": "list",
+          "cachedResultName": "content_drafts",
+          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "draft_id",
+              "keyValue": "={{ $('Parse Callback').item.json.draft_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "superseded"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "draft_id",
+              "displayName": "draft_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "linkedin",
+              "displayName": "linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "twitter_thread",
+              "displayName": "twitter_thread",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "instragram",
+              "displayName": "instragram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3008,
+        16
+      ],
+      "id": "56b91d3c-81e9-4aad-981c-1fed99a406d5",
+      "name": "Update row(s)1"
+    }
+  ],
+  "pinData": {},
   "connections": {
     "Groq Chat Model": {
       "ai_languageModel": [
@@ -138,14 +854,132 @@
           }
         ]
       ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Create Draft Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Draft Record": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Parse Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Callback": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
-  "versionId": "7e5f4a87-111b-4939-83f9-bb960c41b034",
+  "versionId": "62bf8bae-2bf3-4c84-b573-7ed53056c7cc",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "b438af64ce1b2a76948629b109f6f152a08b8580ba6d3ea6989ea94eca4091b2"
