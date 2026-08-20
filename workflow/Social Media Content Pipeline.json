@@ -52,7 +52,8 @@
         0
       ],
       "id": "26f8a8a8-9c3f-4575-b0c5-50092e9746ce",
-      "name": "Basic LLM Chain"
+      "name": "Basic LLM Chain",
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -730,6 +731,57 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "de938215-9870-42ec-a042-a399454c89a0",
+              "name": "brief",
+              "value": "={{ $('Edit Fields1').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "e2bc59fb-3d15-4de2-abcb-b66ed3dd7bf6",
+              "name": "chat_id",
+              "value": "={{ $('Edit Fields1').item.json.chat_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        864,
+        272
+      ],
+      "id": "9047dc66-a4f5-43e4-b385-9d64706315d3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "=❌ I couldn't generate your social media content.  There was an error while processing your brief.  Your original brief: {{ $json.brief }}  Please try sending the brief again.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1088,
+        272
+      ],
+      "id": "aff51a05-5829-4b69-a378-91c2cc769e47",
+      "name": "Send a text message2",
+      "webhookId": "1d4ec6b6-c04c-41a0-936f-1ab4963d37c9",
+      "credentials": {
+        "telegramApi": {
+          "id": "98Al47BIavs6MRX2",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -772,6 +824,13 @@
         [
           {
             "node": "Create Draft Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -898,6 +957,17 @@
           }
         ]
       ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -906,7 +976,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "3bbd75ac-bea5-4461-a0fb-fe929e03737a",
+  "versionId": "5a692823-8882-4bdb-8e21-10bfae1f306d",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "b438af64ce1b2a76948629b109f6f152a08b8580ba6d3ea6989ea94eca4091b2"
