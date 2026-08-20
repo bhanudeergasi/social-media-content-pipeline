@@ -41,7 +41,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are an expert social media content strategist.\n\nThe user will provide a natural-language content brief.\n\nYour task is to create THREE platform-specific drafts from the brief:\n\n1. LinkedIn\n2. X/Twitter\n3. Instagram\n\nUSER BRIEF:\n{{ $('Telegram Trigger').item.json.message.text }}\n\nCONTENT REQUIREMENTS:\n\nLINKEDIN:\n- Write a professional but engaging LinkedIn post.\n- Use short paragraphs for readability.\n- Start with a strong hook.\n- Provide useful insights rather than generic statements.\n- End with a thoughtful question or call to action.\n- Use 3–5 relevant hashtags.\n- Avoid excessive emojis.\n\nX/TWITTER:\n- Create a thread of 4–6 posts.\n- Each post must be concise enough for X.\n- The first post should be a strong hook.\n- Each subsequent post should logically continue the idea.\n- The final post should provide a conclusion or call to action.\n- Number each post as 1/, 2/, 3/, etc.\n\nINSTAGRAM:\n- Write an engaging caption.\n- Start with a strong first line.\n- Use a conversational style.\n- Include a clear call to action.\n- Use 5–8 relevant hashtags.\n- Emojis may be used naturally but should not be excessive.\n\nIMPORTANT:\n- Do not mention that you are an AI.\n- Do not add explanations, notes, or commentary outside the requested JSON.\n- Return only valid JSON.\n- Make each platform's content meaningfully different rather than copying the same text.\n\nReturn ONLY valid JSON in exactly this structure:\n\n{\n  \"linkedin\": \"LinkedIn post here\",\n  \"twitter_thread\": [\n    \"1/ ...\",\n    \"2/ ...\",\n    \"3/ ...\",\n    \"4/ ...\"\n  ],\n  \"instagram\": \"Instagram caption here\"\n}\nImportant:\n- Never invent statistics, percentages, research findings, company claims, or factual numbers.\n- Only use numerical claims if they are explicitly provided in the user's brief.\n- If the brief does not contain evidence for a claim, express it qualitatively instead.",
+        "text": "=You are an expert social media content strategist.\n\nThe user will provide a natural-language content brief.\n\nYour task is to create THREE platform-specific drafts from the brief:\n\n1. LinkedIn\n2. X/Twitter\n3. Instagram\n\nUSER BRIEF:\n{{ $json.chatInput }}\n\nCONTENT REQUIREMENTS:\n\nLINKEDIN:\n- Write a professional but engaging LinkedIn post.\n- Use short paragraphs for readability.\n- Start with a strong hook.\n- Provide useful insights rather than generic statements.\n- End with a thoughtful question or call to action.\n- Use 3–5 relevant hashtags.\n- Avoid excessive emojis.\n\nX/TWITTER:\n- Create a thread of 4–6 posts.\n- Each post must be concise enough for X.\n- The first post should be a strong hook.\n- Each subsequent post should logically continue the idea.\n- The final post should provide a conclusion or call to action.\n- Number each post as 1/, 2/, 3/, etc.\n\nINSTAGRAM:\n- Write an engaging caption.\n- Start with a strong first line.\n- Use a conversational style.\n- Include a clear call to action.\n- Use 5–8 relevant hashtags.\n- Emojis may be used naturally but should not be excessive.\n\nIMPORTANT:\n- Do not mention that you are an AI.\n- Do not add explanations, notes, or commentary outside the requested JSON.\n- Return only valid JSON.\n- Make each platform's content meaningfully different rather than copying the same text.\n\nReturn ONLY valid JSON in exactly this structure:\n\n{\n  \"linkedin\": \"LinkedIn post here\",\n  \"twitter_thread\": [\n    \"1/ ...\",\n    \"2/ ...\",\n    \"3/ ...\",\n    \"4/ ...\"\n  ],\n  \"instagram\": \"Instagram caption here\"\n}\nImportant:\n- Never invent statistics, percentages, research findings, company claims, or factual numbers.\n- Only use numerical claims if they are explicitly provided in the user's brief.\n- If the brief does not contain evidence for a claim, express it qualitatively instead.",
         "hasOutputParser": true,
         "batching": {}
       },
@@ -62,8 +62,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        416,
-        176
+        336,
+        352
       ],
       "id": "2dfbe226-0b20-4780-8008-462ab9e6e042",
       "name": "Groq Chat Model",
@@ -88,12 +88,6 @@
                     "text": "APPROVE",
                     "additionalFields": {
                       "callback_data": "=approve:{{ $('Create Draft Record').item.json.draft_id }}"
-                    }
-                  },
-                  {
-                    "text": "REGENERATE",
-                    "additionalFields": {
-                      "callback_data": "=regenerate:{{ $('Create Draft Record').item.json.draft_id }}"
                     }
                   }
                 ]
@@ -127,8 +121,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        560,
-        208
+        608,
+        352
       ],
       "id": "b123e049-3552-45f2-9399-82ca121db750",
       "name": "Structured Output Parser"
@@ -169,7 +163,7 @@
             {
               "id": "46df4e88-35c6-4e46-8b29-36b79b8cc68a",
               "name": "chat_id",
-              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "value": "={{ $('Edit Fields1').item.json.chat_id }}",
               "type": "string"
             },
             {
@@ -187,7 +181,7 @@
             {
               "id": "d5653c93-8493-497b-97ad-5e35297157d4",
               "name": "brief",
-              "value": "={{ $('Telegram Trigger').item.json.message.text }}",
+              "value": "={{ $('Edit Fields1').item.json.chatInput }}",
               "type": "string"
             }
           ]
@@ -434,29 +428,6 @@
                       "operation": "equals"
                     },
                     "id": "5b19d711-7d23-4a10-847f-131141eb1693"
-                  }
-                ],
-                "combinator": "and"
-              }
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "dc1f4069-1a23-4358-baf9-52d9c6325736",
-                    "leftValue": "={{ $('Parse Callback').item.json.action}}",
-                    "rightValue": "regenerate",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
                   }
                 ],
                 "combinator": "and"
@@ -711,113 +682,54 @@
     },
     {
       "parameters": {
-        "operation": "update",
-        "dataTableId": {
-          "__rl": true,
-          "value": "ngEk11YuXhRpQwJD",
-          "mode": "list",
-          "cachedResultName": "content_drafts",
-          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
-        },
-        "filters": {
-          "conditions": [
+        "assignments": {
+          "assignments": [
             {
-              "keyName": "draft_id",
-              "keyValue": "={{ $('Parse Callback').item.json.draft_id }}"
+              "id": "d77a92a6-0727-430f-a276-5b9a6defe8b8",
+              "name": "chatInput",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "fe880740-b179-4be0-a641-e5f349cdb88c",
+              "name": "chat_id",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "string"
             }
           ]
         },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "status": "superseded"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "draft_id",
-              "displayName": "draft_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "chat_id",
-              "displayName": "chat_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "linkedin",
-              "displayName": "linkedin",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "twitter_thread",
-              "displayName": "twitter_thread",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "instragram",
-              "displayName": "instragram",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "status",
-              "displayName": "status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "created_at",
-              "displayName": "created_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
         "options": {}
       },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1.1,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
       "position": [
-        3008,
-        16
+        224,
+        0
       ],
-      "id": "56b91d3c-81e9-4aad-981c-1fed99a406d5",
-      "name": "Update row(s)1"
+      "id": "987060fb-c9a7-4781-bbbe-040e1e7200d6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Get row(s)').item.json.chat_id }}",
+        "text": "=✅ Content Approved & Scheduled!  Your social media content has been added to the publishing calendar. \n📅 Scheduled Date:{{ $json.scheduled_date }} \n📌 Status: Approved \nThe following content has been saved:\n• LinkedIn \n• X/Twitter\n• Instagram",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3328,
+        -304
+      ],
+      "id": "430ad637-6fc5-4f84-99b6-520c2720cccc",
+      "name": "Send a text message1",
+      "webhookId": "ca14fa6b-6b83-405d-b1f2-1f5fc26fee8c",
+      "credentials": {
+        "telegramApi": {
+          "id": "98Al47BIavs6MRX2",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -848,7 +760,7 @@
       "main": [
         [
           {
-            "node": "Basic LLM Chain",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
@@ -951,13 +863,6 @@
             "type": "main",
             "index": 0
           }
-        ],
-        [
-          {
-            "node": "Update row(s)1",
-            "type": "main",
-            "index": 0
-          }
         ]
       ]
     },
@@ -971,15 +876,37 @@
           }
         ]
       ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "62bf8bae-2bf3-4c84-b573-7ed53056c7cc",
+  "versionId": "3bbd75ac-bea5-4461-a0fb-fe929e03737a",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "b438af64ce1b2a76948629b109f6f152a08b8580ba6d3ea6989ea94eca4091b2"
