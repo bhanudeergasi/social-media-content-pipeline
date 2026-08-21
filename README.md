@@ -39,23 +39,31 @@ Telegram Confirmation
 - 🔔 Sends confirmation to Telegram after successful approval
 - ⚠️ Handles AI failures and preserves the original brief
 ```text
-Telegram
-   ↓
-n8n
-   ↓
-Groq LLM
-   ↓
-Structured Output
-   ↓
-Data Table
-   ↓
-Telegram Approval
-   ↓
-Callback Validation
-   ↓
-Google Sheets
-   ↓
-Telegram Confirmation
+       Telegram
+          ↓
+Single Telegram Trigger
+          ↓
+Message / Callback Router
+          ↓
+ ┌───────────────────┬
+ │                   │                   
+Message           Callback
+ │                   │
+ ↓                   ↓
+Groq LLM        Parse Callback
+ │                   │
+ ↓                   ↓
+Create Draft      Get Draft
+ │                   │
+ ↓                   ↓
+Telegram Review   Status Validation
+                     │
+                     ↓
+               Google Sheets
+                     ↓
+            Telegram Confirmation
+                     
+    
 ```
 AI failures follow a separate path:
 ```
@@ -68,13 +76,13 @@ Telegram Error Message
 Original Brief Preserved
 ```
 ## 🛠️ Tech Stack
-- Technology	Purpose
-- n8n	Workflow automation
+ Technology        	Purpose
+- n8n	                  Workflow automation
 - Telegram Bot API	User interaction & approval
-- Groq	AI content generation
-- LLM	Platform-specific content creation
-- n8n Data Tables	Draft & status management
-- Google Sheets	Publishing calendar
+- Groq	            AI content generation
+- LLM	                  Platform-specific content creation
+- n8n Data Tables 	Draft & status management
+- Google Sheets	      Publishing calendar
 - 📊 Draft Status Flow
     pending → approved
 
