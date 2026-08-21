@@ -4,22 +4,23 @@
     {
       "parameters": {
         "updates": [
-          "message"
+          "message",
+          "callback_query"
         ],
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.5,
       "position": [
-        0,
-        0
+        -3584,
+        320
       ],
-      "id": "47c228e8-7bcd-4730-9132-56c9c96a7306",
+      "id": "3f6a82c8-8b8d-4ad5-a55c-49cd1bbe3b10",
       "name": "Telegram Trigger",
       "webhookId": "7b46fc83-34a4-44c8-997b-c6a23c586e36",
       "credentials": {
         "telegramApi": {
-          "id": "98Al47BIavs6MRX2",
+          "id": "j43mUQKWXtvwACUh",
           "name": "Telegram account"
         }
       }
@@ -31,10 +32,10 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
       "position": [
-        224,
-        128
+        -3104,
+        432
       ],
-      "id": "13838c8c-6d3e-420e-a336-4b3e3e42726b",
+      "id": "b96503cb-079b-44b5-b7f1-212127553f73",
       "name": "When chat message received",
       "webhookId": "a4078326-7988-48d1-b840-cabad054e229"
     },
@@ -48,10 +49,10 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        416,
-        0
+        -2912,
+        304
       ],
-      "id": "26f8a8a8-9c3f-4575-b0c5-50092e9746ce",
+      "id": "1e77d59e-91df-44be-8b76-4643a09d5acf",
       "name": "Basic LLM Chain",
       "onError": "continueErrorOutput"
     },
@@ -63,14 +64,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        336,
-        352
+        -2992,
+        656
       ],
-      "id": "2dfbe226-0b20-4780-8008-462ab9e6e042",
+      "id": "dc91b57c-8dc4-41e9-b455-6b2d646a7dec",
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
-          "id": "a1eC4LpD9F9S9Ps3",
+          "id": "FSRbQM9B8keF2Der",
           "name": "Groq account"
         }
       }
@@ -101,15 +102,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1312,
-        16
+        -2016,
+        320
       ],
-      "id": "c58749a9-9a29-41b0-aa57-3d5ee6a7b1aa",
+      "id": "90cb628a-2249-4ee5-8f97-abc4cdc20ea8",
       "name": "Send a text message",
       "webhookId": "0ebc951e-533d-42b9-898e-03b2656d4ca1",
       "credentials": {
         "telegramApi": {
-          "id": "98Al47BIavs6MRX2",
+          "id": "j43mUQKWXtvwACUh",
           "name": "Telegram account"
         }
       }
@@ -122,34 +123,11 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        608,
-        352
+        -2720,
+        656
       ],
-      "id": "b123e049-3552-45f2-9399-82ca121db750",
+      "id": "f460639e-d751-4bfa-ad4b-d6374de42323",
       "name": "Structured Output Parser"
-    },
-    {
-      "parameters": {
-        "updates": [
-          "callback_query"
-        ],
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegramTrigger",
-      "typeVersion": 1.5,
-      "position": [
-        1888,
-        16
-      ],
-      "id": "5335eb7f-4ab5-4390-9504-515466671fb7",
-      "name": "Telegram Trigger1",
-      "webhookId": "98491764-03a2-44ec-a453-170d5c4d25e0",
-      "credentials": {
-        "telegramApi": {
-          "id": "98Al47BIavs6MRX2",
-          "name": "Telegram account"
-        }
-      }
     },
     {
       "parameters": {
@@ -164,7 +142,7 @@
             {
               "id": "46df4e88-35c6-4e46-8b29-36b79b8cc68a",
               "name": "chat_id",
-              "value": "={{ $('Edit Fields1').item.json.chat_id }}",
+              "value": "={{ $('get chat message & chat id').item.json.chat_id }}",
               "type": "string"
             },
             {
@@ -182,7 +160,7 @@
             {
               "id": "d5653c93-8493-497b-97ad-5e35297157d4",
               "name": "brief",
-              "value": "={{ $('Edit Fields1').item.json.chatInput }}",
+              "value": "={{ $('get chat message & chat id').item.json.chatInput }}",
               "type": "string"
             }
           ]
@@ -192,20 +170,20 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        768,
-        16
+        -2560,
+        320
       ],
-      "id": "94cc64b9-dae9-483e-a42e-1ffc0199cf43",
+      "id": "bf00155e-ef7b-4bf0-9d82-ec1cc96cddfc",
       "name": "Create Draft Record"
     },
     {
       "parameters": {
         "dataTableId": {
           "__rl": true,
-          "value": "ngEk11YuXhRpQwJD",
+          "value": "o2tG7UZumXcQ2wBl",
           "mode": "list",
           "cachedResultName": "content_drafts",
-          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+          "cachedResultUrl": "/projects/Vrwz1JPppfg4HuhL/datatables/o2tG7UZumXcQ2wBl"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -214,7 +192,7 @@
             "chat_id": "={{ $json.chat_id }}",
             "linkedin": "={{ $('Basic LLM Chain').item.json.output.linkedin }}",
             "twitter_thread": "={{ JSON.stringify($('Basic LLM Chain').item.json.output.twitter_thread) }}",
-            "instragram": "={{ $('Basic LLM Chain').item.json.output.instagram }}",
+            "instagram": "={{ $('Basic LLM Chain').item.json.output.instagram }}",
             "status": "={{ $json.status }}",
             "created_at": "={{ $json.created_at }}",
             "brief": "={{ $json.brief }}"
@@ -262,8 +240,8 @@
               "removed": false
             },
             {
-              "id": "instragram",
-              "displayName": "instragram",
+              "id": "instagram",
+              "displayName": "instagram",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -310,10 +288,10 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        992,
-        16
+        -2336,
+        320
       ],
-      "id": "00a1c5da-8a86-43c3-82fe-3bfb8f9f4893",
+      "id": "1e073089-4f79-4542-8947-2fd68a5f0865",
       "name": "Insert row"
     },
     {
@@ -339,10 +317,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        2112,
-        16
+        -3024,
+        976
       ],
-      "id": "3adbeba0-8c3d-4bfa-9f57-b6b88ae86959",
+      "id": "69f6b806-3008-4211-9dfc-276decadf817",
       "name": "Parse Callback"
     },
     {
@@ -350,10 +328,10 @@
         "operation": "get",
         "dataTableId": {
           "__rl": true,
-          "value": "ngEk11YuXhRpQwJD",
+          "value": "o2tG7UZumXcQ2wBl",
           "mode": "list",
           "cachedResultName": "content_drafts",
-          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+          "cachedResultUrl": "/projects/Vrwz1JPppfg4HuhL/datatables/o2tG7UZumXcQ2wBl"
         },
         "matchType": "allConditions",
         "filters": {
@@ -368,10 +346,10 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2336,
-        16
+        -2784,
+        976
       ],
-      "id": "e7852a7d-e3de-454b-b898-22d042acbbda",
+      "id": "488d3b36-65eb-453d-b206-f737b07bc52b",
       "name": "Get row(s)"
     },
     {
@@ -402,10 +380,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2560,
-        16
+        -2592,
+        976
       ],
-      "id": "c5492aac-48fa-4d07-ba7e-999450d971a3",
+      "id": "c502b6d9-5503-4728-ac59-4aaccb4171f2",
       "name": "If"
     },
     {
@@ -441,10 +419,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        2784,
-        -80
+        -2304,
+        960
       ],
-      "id": "bf2d3be5-f19c-4ee6-bd1b-30ed02dd0f94",
+      "id": "45621d31-e9b0-4685-a29a-32fe61e449c5",
       "name": "Switch"
     },
     {
@@ -452,10 +430,10 @@
         "operation": "update",
         "dataTableId": {
           "__rl": true,
-          "value": "ngEk11YuXhRpQwJD",
+          "value": "o2tG7UZumXcQ2wBl",
           "mode": "list",
           "cachedResultName": "content_drafts",
-          "cachedResultUrl": "/projects/ZRzLZamBfCsJwZRn/datatables/ngEk11YuXhRpQwJD"
+          "cachedResultUrl": "/projects/Vrwz1JPppfg4HuhL/datatables/o2tG7UZumXcQ2wBl"
         },
         "filters": {
           "conditions": [
@@ -513,8 +491,8 @@
               "removed": false
             },
             {
-              "id": "instragram",
-              "displayName": "instragram",
+              "id": "instagram",
+              "displayName": "instagram",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -541,6 +519,16 @@
               "type": "string",
               "readOnly": false,
               "removed": false
+            },
+            {
+              "id": "brief",
+              "displayName": "brief",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -551,10 +539,10 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3008,
-        -176
+        -1968,
+        976
       ],
-      "id": "08971ca2-eca4-4134-8ec5-6f21895af48a",
+      "id": "c5047104-7b9c-46cf-9589-4729c3192b98",
       "name": "Update row(s)"
     },
     {
@@ -581,7 +569,7 @@
             "chat_id": "={{ $('Get row(s)').item.json.chat_id }}",
             "linkedin": "={{ $('Get row(s)').item.json.linkedin }}",
             "twitter_thread": "={{ $('Get row(s)').item.json.twitter_thread }}",
-            "instagram": "={{ $('Get row(s)').item.json.instragram }}",
+            "instagram": "={{ $('Get row(s)').item.json.instagram }}",
             "status": "=approved",
             "created_at": "={{ $('Get row(s)').item.json.created_at }}",
             "scheduled_date": "={{ $now.plus({days: 1}).toFormat('yyyy-MM-dd') }}"
@@ -669,17 +657,95 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3168,
-        -160
+        -1728,
+        976
       ],
-      "id": "1ef0f7e9-607c-4d3c-a5fb-6d4e9a18905a",
+      "id": "7f24e4ec-7d26-4ed6-91bc-953ee85a2d6c",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "kOh38l89Re1vRqEx",
-          "name": "Google Sheets account 2"
+          "id": "cWUsDuQMyaPkxfKO",
+          "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Get row(s)').item.json.chat_id }}",
+        "text": "=✅ Content Approved & Scheduled!  Your social media content has been added to the publishing calendar. \n📅 Scheduled Date:{{ $json.scheduled_date }} \n📌 Status: Approved \nThe following content has been saved:\n• LinkedIn \n• X/Twitter\n• Instagram",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1376,
+        960
+      ],
+      "id": "ef366d71-821d-417b-a57c-e88a8868d04b",
+      "name": "Send a text message1",
+      "webhookId": "ca14fa6b-6b83-405d-b1f2-1f5fc26fee8c",
+      "credentials": {
+        "telegramApi": {
+          "id": "j43mUQKWXtvwACUh",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "=❌ I couldn't generate your social media content.  There was an error while processing your brief.  Your original brief: {{ $json.brief }}  Please try sending the brief again.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -2240,
+        576
+      ],
+      "id": "beb3f6d3-4f71-4149-997e-bc755bc513bb",
+      "name": "Send a text message2",
+      "webhookId": "1d4ec6b6-c04c-41a0-936f-1ab4963d37c9",
+      "credentials": {
+        "telegramApi": {
+          "id": "j43mUQKWXtvwACUh",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a4c320a9-79e2-4031-ada5-9d37a983386c",
+              "leftValue": "={{ !!$json.message }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3376,
+        336
+      ],
+      "id": "8db935df-d4ab-41a1-8954-1ccabe162da0",
+      "name": "If1"
     },
     {
       "parameters": {
@@ -704,33 +770,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        224,
-        0
+        -3104,
+        304
       ],
-      "id": "987060fb-c9a7-4781-bbbe-040e1e7200d6",
-      "name": "Edit Fields1"
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Get row(s)').item.json.chat_id }}",
-        "text": "=✅ Content Approved & Scheduled!  Your social media content has been added to the publishing calendar. \n📅 Scheduled Date:{{ $json.scheduled_date }} \n📌 Status: Approved \nThe following content has been saved:\n• LinkedIn \n• X/Twitter\n• Instagram",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        3328,
-        -304
-      ],
-      "id": "430ad637-6fc5-4f84-99b6-520c2720cccc",
-      "name": "Send a text message1",
-      "webhookId": "ca14fa6b-6b83-405d-b1f2-1f5fc26fee8c",
-      "credentials": {
-        "telegramApi": {
-          "id": "98Al47BIavs6MRX2",
-          "name": "Telegram account"
-        }
-      }
+      "id": "cb64d0f0-9678-4d53-a284-14dc38546705",
+      "name": "get chat message & chat id"
     },
     {
       "parameters": {
@@ -739,13 +783,13 @@
             {
               "id": "de938215-9870-42ec-a042-a399454c89a0",
               "name": "brief",
-              "value": "={{ $('Edit Fields1').item.json.chatInput }}",
+              "value": "={{ $('get chat message & chat id').item.json.chatInput }}",
               "type": "string"
             },
             {
               "id": "e2bc59fb-3d15-4de2-abcb-b66ed3dd7bf6",
               "name": "chat_id",
-              "value": "={{ $('Edit Fields1').item.json.chat_id }}",
+              "value": "={{ $('get chat message & chat id').item.json.chat_id }}",
               "type": "string"
             }
           ]
@@ -755,33 +799,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        864,
-        272
+        -2464,
+        576
       ],
-      "id": "9047dc66-a4f5-43e4-b385-9d64706315d3",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $json.chat_id }}",
-        "text": "=❌ I couldn't generate your social media content.  There was an error while processing your brief.  Your original brief: {{ $json.brief }}  Please try sending the brief again.",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        1088,
-        272
-      ],
-      "id": "aff51a05-5829-4b69-a378-91c2cc769e47",
-      "name": "Send a text message2",
-      "webhookId": "1d4ec6b6-c04c-41a0-936f-1ab4963d37c9",
-      "credentials": {
-        "telegramApi": {
-          "id": "98Al47BIavs6MRX2",
-          "name": "Telegram account"
-        }
-      }
+      "id": "1b359cd3-de2c-48d5-ad55-4f1a336b17e3",
+      "name": "details about error"
     }
   ],
   "pinData": {},
@@ -812,7 +834,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields1",
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -830,7 +852,7 @@
         ],
         [
           {
-            "node": "Edit Fields",
+            "node": "details about error",
             "type": "main",
             "index": 0
           }
@@ -864,17 +886,6 @@
         [
           {
             "node": "Send a text message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Telegram Trigger1": {
-      "main": [
-        [
-          {
-            "node": "Parse Callback",
             "type": "main",
             "index": 0
           }
@@ -936,17 +947,6 @@
         ]
       ]
     },
-    "Edit Fields1": {
-      "main": [
-        [
-          {
-            "node": "Basic LLM Chain",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Append row in sheet": {
       "main": [
         [
@@ -958,7 +958,36 @@
         ]
       ]
     },
-    "Edit Fields": {
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "get chat message & chat id",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get chat message & chat id": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "details about error": {
       "main": [
         [
           {
@@ -970,18 +999,20 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "5a692823-8882-4bdb-8e21-10bfae1f306d",
+  "versionId": "5ff5527a-5b17-4fbf-9eb5-3c4d565ed5d7",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "b438af64ce1b2a76948629b109f6f152a08b8580ba6d3ea6989ea94eca4091b2"
+    "instanceId": "8839b69d8430ee69daefd5bab0689a3e165d4a884dfd25891f496c2550c629ed"
   },
   "nodeGroups": [],
-  "id": "2Ith7Fc1JXoGrbBN",
+  "id": "DwZhGsinyg4f3diG",
   "tags": []
 }
